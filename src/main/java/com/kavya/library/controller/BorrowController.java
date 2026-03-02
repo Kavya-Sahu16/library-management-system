@@ -35,9 +35,9 @@ public class BorrowController {
         return "Borrow record deleted successfully";
     }
 
-    @PutMapping("/{id}")
-    public Borrow updateBorrow(@PathVariable Long id, @RequestBody Borrow updatedBorrow) {
-        return borrowService.updateBorrow(id, updatedBorrow);
+    @PutMapping("/{id}/return")
+    public Borrow returnBook(@PathVariable Long id) {
+        return borrowService.updateBorrow(id);
     }
 
     @GetMapping("/overdue")

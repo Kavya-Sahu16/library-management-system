@@ -41,18 +41,24 @@ public class BorrowService {
         Member member = memberRepository.findById(borrow.getMember().getId())
                 .orElseThrow(() -> new RuntimeException("Member not found"));
 
-        // ❗ Null-safe active check
         if (Boolean.FALSE.equals(member.getActive())) {
             throw new RuntimeException("Member is not active");
         }
 
-        // attach fully loaded member
+        // Set proper references
+        borrow.setBook(book);
         borrow.setMember(member);
 
-        // Auto set due date (7 days from borrow date)
-        borrow.setDueDate(borrow.getBorrowDate().plusDays(7));
+        // ✅ Backend controls dates
+        LocalDate today = LocalDate.now();
+        borrow.setBorrowDate(today);
+        borrow.setDueDate(today.plusDays(7));
 
-        // decrease copies
+        // ✅ Default values
+        borrow.setReturned(false);
+        borrow.setFine(0.0);
+
+        // Decrease stock
         book.setAvailableCopies(book.getAvailableCopies() - 1);
         bookRepository.save(book);
 
@@ -71,45 +77,40 @@ public class BorrowService {
         borrowRepository.deleteById(id);
     }
 
-    public Borrow updateBorrow(Long id, Borrow updatedBorrow) {
+    @Transactional
+    public Borrow updateBorrow(Long id) {
 
         Borrow existingBorrow = borrowRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Borrow record not found"));
 
-        // 🚫 Guard: prevent double return
-        if (existingBorrow.getReturned()) {
+        if (Boolean.TRUE.equals(existingBorrow.getReturned())) {
             throw new RuntimeException("Book already returned");
         }
 
-        // If changing from not returned → returned
-        if (!existingBorrow.getReturned() && updatedBorrow.getReturned()) {
+        LocalDate today = LocalDate.now();
 
-            Book book = existingBorrow.getBook();
+        existingBorrow.setReturnDate(today);
+        existingBorrow.setReturned(true);
 
-            // increase copies
-            book.setAvailableCopies(book.getAvailableCopies() + 1);
-            bookRepository.save(book);
+        Book book = existingBorrow.getBook();
 
-            // Calculate fine
-            LocalDate dueDate = existingBorrow.getDueDate();
-            LocalDate returnDate = updatedBorrow.getReturnDate();
+        // Increase stock
+        book.setAvailableCopies(book.getAvailableCopies() + 1);
+        bookRepository.save(book);
 
-            if (returnDate.isAfter(dueDate)) {
-                long daysLate = ChronoUnit.DAYS.between(dueDate, returnDate);
-                double fineAmount = daysLate * 10.0;
-                existingBorrow.setFine(fineAmount);
-            } else {
-                existingBorrow.setFine(0.0);
-            }
+        // Calculate fine
+        if (today.isAfter(existingBorrow.getDueDate())) {
+            long daysLate = ChronoUnit.DAYS.between(existingBorrow.getDueDate(), today);
+            existingBorrow.setFine(daysLate * 10.0);
+        } else {
+            existingBorrow.setFine(0.0);
         }
-
-        existingBorrow.setReturnDate(updatedBorrow.getReturnDate());
-        existingBorrow.setReturned(updatedBorrow.getReturned());
 
         return borrowRepository.save(existingBorrow);
     }
+
     public List<Borrow> getOverdueBorrows() {
-    return borrowRepository
-            .findByReturnedFalseAndDueDateBefore(LocalDate.now());
-}
+        return borrowRepository
+                .findByReturnedFalseAndDueDateBefore(LocalDate.now());
+    }
 }
