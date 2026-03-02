@@ -36,8 +36,9 @@ public class BorrowController {
     }
 
     @PutMapping("/{id}/return")
-    public Borrow returnBook(@PathVariable Long id) {
-        return borrowService.updateBorrow(id);
+    public Borrow returnBook(@PathVariable Long id,
+            @RequestBody Borrow updatedBorrow) {
+        return borrowService.updateBorrow(id, updatedBorrow);
     }
 
     @GetMapping("/overdue")

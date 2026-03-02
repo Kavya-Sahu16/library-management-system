@@ -78,7 +78,7 @@ public class BorrowService {
     }
 
     @Transactional
-    public Borrow updateBorrow(Long id) {
+    public Borrow updateBorrow(Long id, Borrow updatedBorrow) {
 
         Borrow existingBorrow = borrowRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Borrow record not found"));
@@ -87,9 +87,9 @@ public class BorrowService {
             throw new RuntimeException("Book already returned");
         }
 
-        LocalDate today = LocalDate.now();
+        LocalDate returnDate = updatedBorrow.getReturnDate();
 
-        existingBorrow.setReturnDate(today);
+        existingBorrow.setReturnDate(returnDate);
         existingBorrow.setReturned(true);
 
         Book book = existingBorrow.getBook();
@@ -99,8 +99,8 @@ public class BorrowService {
         bookRepository.save(book);
 
         // Calculate fine
-        if (today.isAfter(existingBorrow.getDueDate())) {
-            long daysLate = ChronoUnit.DAYS.between(existingBorrow.getDueDate(), today);
+        if (returnDate.isAfter(existingBorrow.getDueDate())) {
+            long daysLate = ChronoUnit.DAYS.between(existingBorrow.getDueDate(), returnDate);
             existingBorrow.setFine(daysLate * 10.0);
         } else {
             existingBorrow.setFine(0.0);
