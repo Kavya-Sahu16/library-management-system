@@ -32,15 +32,16 @@ public class DashboardService {
         // Total Members
         dto.setTotalMembers(memberRepository.count());
 
+        // Total Borrows
+        dto.setTotalBorrows(borrowRepository.count());
+
         // Active Borrows (not returned)
         dto.setTotalActiveBorrows(
-                borrowRepository.countByReturnDateIsNull()
-        );
+                borrowRepository.countByReturnDateIsNull());
 
         // Overdue Borrows
         dto.setTotalOverdueBorrows(
-                borrowRepository.countByDueDateBeforeAndReturnDateIsNull(LocalDate.now())
-        );
+                borrowRepository.countByDueDateBeforeAndReturnDateIsNull(LocalDate.now()));
 
         // Total Fine Collected
         Double totalFine = borrowRepository.getTotalFineCollected();

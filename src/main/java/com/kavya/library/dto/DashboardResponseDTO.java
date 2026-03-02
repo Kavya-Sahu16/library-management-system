@@ -7,6 +7,7 @@ public class DashboardResponseDTO {
     private long totalActiveBorrows;
     private long totalOverdueBorrows;
     private double totalFineCollected;
+    private long totalBorrows;
 
     // Getters and Setters
     // Getters and Setters for total books
@@ -17,6 +18,7 @@ public class DashboardResponseDTO {
     public void setTotalBooks(long totalBooks) {
         this.totalBooks = totalBooks;
     }
+
     // Getters and Setters for total members
     public long getTotalMembers() {
         return totalMembers;
@@ -25,6 +27,7 @@ public class DashboardResponseDTO {
     public void setTotalMembers(long totalMembers) {
         this.totalMembers = totalMembers;
     }
+
     // Getters and Setters for total active borrows
     public long getTotalActiveBorrows() {
         return totalActiveBorrows;
@@ -33,6 +36,7 @@ public class DashboardResponseDTO {
     public void setTotalActiveBorrows(long totalActiveBorrows) {
         this.totalActiveBorrows = totalActiveBorrows;
     }
+
     // Getters and Setters for total overdue borrows
     public long getTotalOverdueBorrows() {
         return totalOverdueBorrows;
@@ -41,6 +45,7 @@ public class DashboardResponseDTO {
     public void setTotalOverdueBorrows(long totalOverdueBorrows) {
         this.totalOverdueBorrows = totalOverdueBorrows;
     }
+
     // Getters and Setters for total fine collected
     public double getTotalFineCollected() {
         return totalFineCollected;
@@ -48,5 +53,14 @@ public class DashboardResponseDTO {
 
     public void setTotalFineCollected(double totalFineCollected) {
         this.totalFineCollected = totalFineCollected;
+    }
+
+    // Getters and Setters for total borrows
+    public long getTotalBorrows() {
+        return totalBorrows;
+    }
+
+    public void setTotalBorrows(long totalBorrows) {
+        this.totalBorrows = totalBorrows;
     }
 }
