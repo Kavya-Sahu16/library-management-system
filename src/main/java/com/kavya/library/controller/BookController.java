@@ -56,4 +56,16 @@ public class BookController {
     public Book updateBook(@PathVariable Long id, @RequestBody Book book) {
         return bookService.updateBook(id, book);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<Page<Book>>> searchBooks(
+            @RequestParam String title,
+            Pageable pageable) {
+
+        Page<Book> booksPage = bookService.searchBooks(title, pageable);
+
+        ApiResponse<Page<Book>> response = new ApiResponse<>(200, "Books fetched successfully", booksPage);
+
+        return ResponseEntity.ok(response);
+    }
 }
