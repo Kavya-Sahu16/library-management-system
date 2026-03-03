@@ -1,9 +1,12 @@
 package com.kavya.library.controller;
 
 import com.kavya.library.dto.ApiResponse;
+import com.kavya.library.dto.BookRequestDTO;
+import com.kavya.library.dto.BookResponseDTO;
 import com.kavya.library.entity.Book;
 import com.kavya.library.service.BookService;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
@@ -23,10 +26,10 @@ public class BookController {
 
     // POST - Add a new book
     @PostMapping // Handles POST request
-    public ResponseEntity<Book> addBook(@Valid @RequestBody Book book) { // @RequestBody → Converts JSON → Book object
-        Book savedBook = bookService.saveBook(book);
-        return ResponseEntity.status(201).body(savedBook);
-    }
+    public ResponseEntity<BookResponseDTO> addBook(@Valid @RequestBody BookRequestDTO dto) {  // @RequestBody → Converts JSON → Book object
+    return ResponseEntity.status(HttpStatus.CREATED)
+            .body(bookService.saveBook(dto));
+}
 
     // GET - All books
     @GetMapping

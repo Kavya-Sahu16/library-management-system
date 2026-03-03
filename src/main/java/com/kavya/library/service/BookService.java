@@ -1,5 +1,7 @@
 package com.kavya.library.service;
 
+import com.kavya.library.dto.BookRequestDTO;
+import com.kavya.library.dto.BookResponseDTO;
 import com.kavya.library.entity.Book;
 import com.kavya.library.repository.BookRepository;
 import org.springframework.stereotype.Service;
@@ -18,8 +20,10 @@ public class BookService {
     }
 
     // Save book
-    public Book saveBook(Book book) {
-        return bookRepository.save(book);
+    public BookResponseDTO saveBook(BookRequestDTO dto) {
+        Book book = mapToEntity(dto);
+        Book saved = bookRepository.save(book);
+        return mapToDTO(saved);
     }
 
     // Get all books
@@ -52,11 +56,32 @@ public class BookService {
         return null;
     }
 
-    public Page<Book> getAllBooks(Pageable pageable) {
-        return bookRepository.findAll(pageable);
+    public Page<BookResponseDTO> getAllBooks(Pageable pageable) {
+        return bookRepository.findAll(pageable)
+                .map(this::mapToDTO);
     }
 
-    public Page<Book> searchBooks(String title, Pageable pageable) {
-        return bookRepository.findByTitleContainingIgnoreCase(title, pageable);
+    public Page<BookResponseDTO> searchBooks(String title, Pageable pageable) {
+        return bookRepository
+                .findByTitleContainingIgnoreCase(title, pageable)
+                .map(this::mapToDTO);
+    }
+
+    private BookResponseDTO mapToDTO(Book book) {
+        return new BookResponseDTO(
+                book.getId(),
+                book.getTitle(),
+                book.getAuthor(),
+                book.getIsbn(),
+                book.getAvailableCopies());
+    }
+
+    private Book mapToEntity(BookRequestDTO dto) {
+        Book book = new Book();
+        book.setTitle(dto.getTitle());
+        book.setAuthor(dto.getAuthor());
+        book.setIsbn(dto.getIsbn());
+        book.setAvailableCopies(dto.getAvailableCopies());
+        return book;
     }
 }
