@@ -19,7 +19,7 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     public SecurityConfig(CustomUserDetailsService userDetailsService,
-                          JwtAuthenticationFilter jwtAuthenticationFilter) {
+            JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.userDetailsService = userDetailsService;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
@@ -28,35 +28,31 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
 
-                // 🔓 Public endpoints
-                .requestMatchers(
-                        "/",
-                        "/auth/**",
-                        "/swagger-ui/**",
-                        "/v3/api-docs/**",
-                        "/swagger-ui.html"
-                ).permitAll()
+                        // Public endpoints
+                        .requestMatchers("/auth/**").permitAll()
 
-                // 🔐 Admin-only endpoints
-                .requestMatchers(HttpMethod.POST, "/books/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.PUT, "/books/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/books/**").hasRole("ADMIN")
+                        // Swagger endpoints (VERY IMPORTANT)
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html")
+                        .permitAll()
 
-                // 👥 User + Admin can view
-                .requestMatchers(HttpMethod.GET, "/books/**")
-                .hasAnyRole("USER", "ADMIN")
+                        // Admin-only endpoints
+                        .requestMatchers(HttpMethod.POST, "/books/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/books/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/books/**").hasRole("ADMIN")
 
-                // 🔒 Everything else requires authentication
-                .anyRequest().authenticated()
-            )
-            .sessionManagement(session -> 
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
-            .addFilterBefore(jwtAuthenticationFilter,
-                    UsernamePasswordAuthenticationFilter.class);
+                        // User + Admin can view
+                        .requestMatchers(HttpMethod.GET, "/books/**").hasAnyRole("USER", "ADMIN")
+
+                        .anyRequest().authenticated())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthenticationFilter,
+                        UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
