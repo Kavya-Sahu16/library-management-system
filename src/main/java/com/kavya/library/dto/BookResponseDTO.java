@@ -17,4 +17,23 @@ public class BookResponseDTO {
     }
 
     // Getters only (no setters needed for response)
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public Integer getAvailableCopies() {
+        return availableCopies;
+    }
 }

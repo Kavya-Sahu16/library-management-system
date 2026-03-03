@@ -8,6 +8,9 @@ public class DashboardResponseDTO {
     private long totalOverdueBorrows;
     private double totalFineCollected;
     private long totalBorrows;
+    private Long totalReturnedBorrows;
+    private String mostBorrowedBook;
+    private Long mostBorrowCount;
 
     // Getters and Setters
     // Getters and Setters for total books
@@ -62,5 +65,32 @@ public class DashboardResponseDTO {
 
     public void setTotalBorrows(long totalBorrows) {
         this.totalBorrows = totalBorrows;
+    }
+
+    // totalReturnedBorrows
+    public Long getTotalReturnedBorrows() {
+        return totalReturnedBorrows;
+    }
+
+    public void setTotalReturnedBorrows(Long totalReturnedBorrows) {
+        this.totalReturnedBorrows = totalReturnedBorrows;
+    }
+
+    // mostBorrowedBook
+    public String getMostBorrowedBook() {
+        return mostBorrowedBook;
+    }
+
+    public void setMostBorrowedBook(String mostBorrowedBook) {
+        this.mostBorrowedBook = mostBorrowedBook;
+    }
+
+    // mostBorrowCount
+    public Long getMostBorrowCount() {
+        return mostBorrowCount;
+    }
+
+    public void setMostBorrowCount(Long mostBorrowCount) {
+        this.mostBorrowCount = mostBorrowCount;
     }
 }
