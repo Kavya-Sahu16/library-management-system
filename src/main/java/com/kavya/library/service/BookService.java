@@ -7,12 +7,13 @@ import com.kavya.library.repository.BookRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class BookService {
 
+    private static final Logger logger = LoggerFactory.getLogger(BookService.class);
     private final BookRepository bookRepository;
 
     public BookService(BookRepository bookRepository) {
@@ -21,28 +22,41 @@ public class BookService {
 
     // Save book
     public BookResponseDTO saveBook(BookRequestDTO dto) {
+        logger.info("Saving new book with title: {}", dto.getTitle());
+
         Book book = mapToEntity(dto);
         Book saved = bookRepository.save(book);
+
+        logger.info("Book saved successfully with ID: {}", saved.getId());
+
         return mapToDTO(saved);
     }
 
     // Get all books
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+    public Page<BookResponseDTO> getAllBooks(Pageable pageable) {
+        logger.info("Fetching books - page: {}, size: {}",
+                pageable.getPageNumber(),
+                pageable.getPageSize());
+
+        return bookRepository.findAll(pageable)
+                .map(this::mapToDTO);
     }
 
     // Get book by ID
     public Book getBookById(Long id) {
+        logger.info("Fetching book with ID: {}", id);
         return bookRepository.findById(id).orElse(null);
     }
 
     // Delete book
     public void deleteBook(Long id) {
+        logger.info("Deleting book with ID: {}", id);
         bookRepository.deleteById(id);
     }
 
     // Update book
     public Book updateBook(Long id, Book updatedBook) {
+        logger.info("Updating book with ID: {}", id);
         Book existingBook = bookRepository.findById(id).orElse(null);
 
         if (existingBook != null) {
@@ -56,12 +70,9 @@ public class BookService {
         return null;
     }
 
-    public Page<BookResponseDTO> getAllBooks(Pageable pageable) {
-        return bookRepository.findAll(pageable)
-                .map(this::mapToDTO);
-    }
-
     public Page<BookResponseDTO> searchBooks(String title, Pageable pageable) {
+        logger.info("Searching books with title containing: {}", title);
+
         return bookRepository
                 .findByTitleContainingIgnoreCase(title, pageable)
                 .map(this::mapToDTO);
