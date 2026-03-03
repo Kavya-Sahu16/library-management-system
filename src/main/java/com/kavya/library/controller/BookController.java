@@ -1,6 +1,5 @@
 package com.kavya.library.controller;
 
-import com.kavya.library.dto.ApiResponse;
 import com.kavya.library.dto.BookRequestDTO;
 import com.kavya.library.dto.BookResponseDTO;
 import com.kavya.library.entity.Book;
@@ -25,21 +24,32 @@ public class BookController {
     }
 
     // POST - Add a new book
-    @PostMapping // Handles POST request
-    public ResponseEntity<BookResponseDTO> addBook(@Valid @RequestBody BookRequestDTO dto) {  // @RequestBody → Converts JSON → Book object
-    return ResponseEntity.status(HttpStatus.CREATED)
-            .body(bookService.saveBook(dto));
-}
+    @PostMapping
+    public ResponseEntity<BookResponseDTO> addBook(
+            @Valid @RequestBody BookRequestDTO dto) {
 
-    // GET - All books
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(bookService.saveBook(dto));
+    }
+
+    // GET - All books (paginated)
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<Book>>> getAllBooks(Pageable pageable) {
+    public ResponseEntity<Page<BookResponseDTO>> getAllBooks(
+            Pageable pageable) {
 
-        Page<Book> booksPage = bookService.getAllBooks(pageable);
+        return ResponseEntity.ok(
+                bookService.getAllBooks(pageable));
+    }
 
-        ApiResponse<Page<Book>> response = new ApiResponse<>(200, "Books fetched successfully", booksPage);
+    // GET - Search by title
+    @GetMapping("/search")
+    public ResponseEntity<Page<BookResponseDTO>> searchBooks(
+            @RequestParam String title,
+            Pageable pageable) {
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(
+                bookService.searchBooks(title, pageable));
     }
 
     // GET - Book by ID
@@ -58,17 +68,5 @@ public class BookController {
     @PutMapping("/{id}")
     public Book updateBook(@PathVariable Long id, @RequestBody Book book) {
         return bookService.updateBook(id, book);
-    }
-
-    @GetMapping("/search")
-    public ResponseEntity<ApiResponse<Page<Book>>> searchBooks(
-            @RequestParam String title,
-            Pageable pageable) {
-
-        Page<Book> booksPage = bookService.searchBooks(title, pageable);
-
-        ApiResponse<Page<Book>> response = new ApiResponse<>(200, "Books fetched successfully", booksPage);
-
-        return ResponseEntity.ok(response);
     }
 }
