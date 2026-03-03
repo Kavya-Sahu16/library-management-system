@@ -1,7 +1,10 @@
 package com.kavya.library.controller;
 
+import com.kavya.library.dto.ApiResponse;
 import com.kavya.library.entity.Book;
 import com.kavya.library.service.BookService;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,15 +20,20 @@ public class BookController {
     }
 
     // POST - Add a new book
-    @PostMapping  // Handles POST request
-    public Book addBook(@RequestBody Book book) {   // @RequestBody → Converts JSON → Book object
+    @PostMapping // Handles POST request
+    public Book addBook(@RequestBody Book book) { // @RequestBody → Converts JSON → Book object
         return bookService.saveBook(book);
     }
 
     // GET - All books
     @GetMapping
-    public List<Book> getAllBooks() {
-        return bookService.getAllBooks();
+    public ResponseEntity<ApiResponse<List<Book>>> getAllBooks() {
+
+        List<Book> books = bookService.getAllBooks();
+
+        ApiResponse<List<Book>> response = new ApiResponse<>(200, "Books fetched successfully", books);
+
+        return ResponseEntity.ok(response);
     }
 
     // GET - Book by ID
