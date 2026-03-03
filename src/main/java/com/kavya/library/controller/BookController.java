@@ -8,7 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @RestController
 @RequestMapping("/books")
@@ -29,11 +30,11 @@ public class BookController {
 
     // GET - All books
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Book>>> getAllBooks() {
+    public ResponseEntity<ApiResponse<Page<Book>>> getAllBooks(Pageable pageable) {
 
-        List<Book> books = bookService.getAllBooks();
+        Page<Book> booksPage = bookService.getAllBooks(pageable);
 
-        ApiResponse<List<Book>> response = new ApiResponse<>(200, "Books fetched successfully", books);
+        ApiResponse<Page<Book>> response = new ApiResponse<>(200, "Books fetched successfully", booksPage);
 
         return ResponseEntity.ok(response);
     }
