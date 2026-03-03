@@ -6,6 +6,7 @@ import com.kavya.library.service.BookService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -21,8 +22,9 @@ public class BookController {
 
     // POST - Add a new book
     @PostMapping // Handles POST request
-    public Book addBook(@RequestBody Book book) { // @RequestBody → Converts JSON → Book object
-        return bookService.saveBook(book);
+    public ResponseEntity<Book> addBook(@Valid @RequestBody Book book) { // @RequestBody → Converts JSON → Book object
+        Book savedBook = bookService.saveBook(book);
+        return ResponseEntity.status(201).body(savedBook);
     }
 
     // GET - All books
