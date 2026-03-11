@@ -1,5 +1,7 @@
 package com.kavya.library.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 import com.kavya.library.dto.DashboardResponseDTO;
 import com.kavya.library.service.DashboardService;
 
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/dashboard")
+@SecurityRequirement(name = "bearerAuth")
 public class DashboardController {
 
     @Autowired

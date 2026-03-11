@@ -1,5 +1,7 @@
 package com.kavya.library.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 import com.kavya.library.dto.BookRequestDTO;
 import com.kavya.library.dto.BookResponseDTO;
 import com.kavya.library.entity.Book;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 
 @RestController
 @RequestMapping("/books")
+@SecurityRequirement(name = "bearerAuth")
 public class BookController {
 
     private final BookService bookService;

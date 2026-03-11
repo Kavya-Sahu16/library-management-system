@@ -1,5 +1,7 @@
 package com.kavya.library.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +10,7 @@ import com.kavya.library.service.MemberService;
 
 @RestController
 @RequestMapping("/members")
+@SecurityRequirement(name = "bearerAuth")
 public class MemberController {
 
     @Autowired

@@ -1,5 +1,7 @@
 package com.kavya.library.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -11,6 +13,7 @@ import com.kavya.library.service.BorrowService;
 
 @RestController
 @RequestMapping("/borrows")
+@SecurityRequirement(name = "bearerAuth")
 public class BorrowController {
 
     @Autowired
