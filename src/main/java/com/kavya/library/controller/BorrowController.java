@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+
 import com.kavya.library.entity.Borrow;
 import com.kavya.library.service.BorrowService;
 
@@ -14,11 +16,14 @@ public class BorrowController {
     @Autowired
     private BorrowService borrowService;
 
+    // LIBRARIAN can issue books
+    @PreAuthorize("hasRole('LIBRARIAN')")
     @PostMapping
     public Borrow addBorrow(@RequestBody Borrow borrow) {
         return borrowService.saveBorrow(borrow);
     }
 
+    // Any authenticated user can view borrow records
     @GetMapping
     public List<Borrow> getAllBorrows() {
         return borrowService.getAllBorrows();
@@ -29,15 +34,19 @@ public class BorrowController {
         return borrowService.getBorrowById(id);
     }
 
+    // ADMIN can delete borrow records
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public String deleteBorrow(@PathVariable Long id) {
         borrowService.deleteBorrow(id);
         return "Borrow record deleted successfully";
     }
 
+    // LIBRARIAN can mark books as returned
+    @PreAuthorize("hasRole('LIBRARIAN')")
     @PutMapping("/{id}/return")
     public Borrow returnBook(@PathVariable Long id,
-            @RequestBody Borrow updatedBorrow) {
+                             @RequestBody Borrow updatedBorrow) {
         return borrowService.updateBorrow(id, updatedBorrow);
     }
 
