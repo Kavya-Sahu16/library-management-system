@@ -92,8 +92,8 @@ public class BookController {
         return bookService.updateBook(id, book);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','LIBRARIAN')")
     @PostMapping("/import-google")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> importGoogleBooks(@RequestParam String title) {
 
         return ResponseEntity.ok(
