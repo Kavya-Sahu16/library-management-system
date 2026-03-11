@@ -29,7 +29,7 @@ public class BookController {
     private final GoogleBooksService googleBooksService;
 
     public BookController(BookService bookService,
-                          GoogleBooksService googleBooksService) {
+            GoogleBooksService googleBooksService) {
         this.bookService = bookService;
         this.googleBooksService = googleBooksService;
     }
@@ -88,7 +88,15 @@ public class BookController {
     // PUT - Update book
     @PutMapping("/{id}")
     public Book updateBook(@PathVariable Long id,
-                           @RequestBody Book book) {
+            @RequestBody Book book) {
         return bookService.updateBook(id, book);
+    }
+
+    @PostMapping("/import-google")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> importGoogleBooks(@RequestParam String title) {
+
+        return ResponseEntity.ok(
+                bookService.importGoogleBooks(title));
     }
 }

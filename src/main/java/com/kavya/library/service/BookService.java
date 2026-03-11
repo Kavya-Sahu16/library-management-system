@@ -2,23 +2,29 @@ package com.kavya.library.service;
 
 import com.kavya.library.dto.BookRequestDTO;
 import com.kavya.library.dto.BookResponseDTO;
+import com.kavya.library.dto.GoogleBookDTO;
 import com.kavya.library.entity.Book;
 import com.kavya.library.repository.BookRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import java.util.List;
+import java.util.ArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Service
 public class BookService {
-
+    private final GoogleBooksService googleBooksService;
     private static final Logger logger = LoggerFactory.getLogger(BookService.class);
     private final BookRepository bookRepository;
 
-    public BookService(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
+    public BookService(BookRepository bookRepository,
+                   GoogleBooksService googleBooksService) {
+    this.bookRepository = bookRepository;
+    this.googleBooksService = googleBooksService;
+}
 
     // Save book
     public BookResponseDTO saveBook(BookRequestDTO dto) {
@@ -95,4 +101,24 @@ public class BookService {
         book.setAvailableCopies(dto.getAvailableCopies());
         return book;
     }
+    
+    public List<Book> importGoogleBooks(String title) {
+
+    List<GoogleBookDTO> googleBooks = googleBooksService.searchBooks(title);
+
+    List<Book> savedBooks = new ArrayList<>();
+
+    for (GoogleBookDTO g : googleBooks) {
+
+        Book book = new Book();
+        book.setTitle(g.getTitle());
+        book.setAuthor(g.getAuthor());
+        book.setIsbn(g.getIsbn());
+        book.setAvailableCopies(5);
+
+        savedBooks.add(bookRepository.save(book));
+    }
+
+    return savedBooks;
+}
 }
