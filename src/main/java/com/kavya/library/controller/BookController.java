@@ -7,6 +7,7 @@ import com.kavya.library.service.BookService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
@@ -24,6 +25,7 @@ public class BookController {
     }
 
     // POST - Add a new book
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<BookResponseDTO> addBook(
             @Valid @RequestBody BookRequestDTO dto) {
