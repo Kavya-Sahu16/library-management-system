@@ -1,84 +1,111 @@
-# 📚 Library Management System API
+# Library Management System API
 
-A **Spring Boot REST API** for managing a library system.  
-The system allows administrators and users to manage books, members, borrowing transactions, and fines.
+A RESTful backend system for managing library operations such as books, members, borrowing, and returns.  
+The system also integrates with the Google Books API to import books automatically.
 
-It also integrates with the **Google Books API** to import books automatically into the library database.
-
-This project demonstrates backend development using:
-
-- Spring Boot
-- REST APIs
-- JWT Authentication
-- MySQL Database
-- Swagger API documentation
-- Cloud deployment
+This project is built using **Spring Boot**, **MySQL**, and **JWT Authentication**, and is deployed on the cloud.
 
 ---
 
-# 🚀 Live API
+## Live API
+
+Base URL:
+
+https://library-api-42m4.onrender.com
 
 Swagger Documentation:
 
 https://library-api-42m4.onrender.com/swagger-ui/index.html
 
-You can test all API endpoints directly from Swagger.
+---
+
+## Features
+
+- User authentication using JWT
+- Role based access control (Admin, Librarian)
+- Book inventory management
+- Member management
+- Borrow and return tracking
+- Fine management
+- Import books from Google Books API
+- RESTful API design
+- Swagger API documentation
+- Cloud deployment
 
 ---
 
-# 🛠 Tech Stack
+## Screenshots
 
-| Technology | Purpose |
-|---|---|
-| Java 17 | Programming Language |
-| Spring Boot | Backend Framework |
-| Spring Security | Authentication & Authorization |
-| JWT | Token-based authentication |
-| Spring Data JPA (Hibernate) | ORM |
-| MySQL | Relational Database |
-| Swagger / OpenAPI | API Documentation |
-| Maven | Build Tool |
-| Render | Cloud Deployment |
+### Swagger API Documentation
+![Swagger UI]
+<img width="1470" height="956" alt="Screenshot 2026-03-12 at 4 02 32 PM" src="https://github.com/user-attachments/assets/27a6546f-35be-4b04-aad8-318f3e19b3e2" />
+
+<img width="1470" height="956" alt="Screenshot 2026-03-12 at 4 02 58 PM" src="https://github.com/user-attachments/assets/25c0f281-055a-4af7-9106-35d3b9ce6aeb" />
+
+
+### Login API (JWT Authentication)
+<img width="1470" height="956" alt="Screenshot 2026-03-12 at 4 09 48 PM" src="https://github.com/user-attachments/assets/0b1051c5-4d9b-4303-b58f-f02c97243fa7" />
+
+<img width="1470" height="956" alt="Screenshot 2026-03-12 at 4 10 00 PM" src="https://github.com/user-attachments/assets/ddbffd60-f0e6-4c6f-bfd7-1550518b9dd4" />
+
+
+### Import Books from Google Books API
+<img width="1470" height="956" alt="Screenshot 2026-03-12 at 4 11 17 PM" src="https://github.com/user-attachments/assets/805f35e8-b0ac-46e4-a055-cdd8834ca308" />
+
+<img width="1470" height="956" alt="Screenshot 2026-03-12 at 4 11 34 PM" src="https://github.com/user-attachments/assets/877b089c-03f2-49ca-9b21-f355c08e8717" />
+
+### Books Stored in Database
+
+
+## Tech Stack
+
+Backend:
+- Java
+- Spring Boot
+- Spring Security
+- Spring Data JPA
+
+Database:
+- MySQL
+
+Authentication:
+- JWT (JSON Web Token)
+
+Tools:
+- Maven
+- Docker
+- Swagger (OpenAPI)
+
+Deployment:
+- Render
 
 ---
 
-# 🏗 System Architecture
+## Project Structure
 
 ```
-Client
-   ↓
-Controller (REST APIs)
-   ↓
-Service Layer (Business Logic)
-   ↓
-Repository Layer (Spring Data JPA)
-   ↓
-MySQL Database
+src/main/java/com/kavya/library
+
+controller     -> REST API endpoints  
+service        -> Business logic  
+repository     -> Database access layer  
+entity         -> JPA entities  
+dto            -> Data transfer objects  
+security       -> JWT authentication and filters  
+config         -> Application configuration  
 ```
-
-The project follows a **layered backend architecture**.
-
-| Layer | Responsibility |
-|---|---|
-| Controller | Handles HTTP requests |
-| Service | Business logic |
-| Repository | Database operations |
-| Entity | Database models |
-| DTO | Data transfer objects |
 
 ---
 
-# 🔐 Authentication
+## Authentication
 
 The API uses **JWT (JSON Web Token)** for authentication.
 
 ### Login
 
-```
 POST /auth/login
-```
 
-Request body:
+Request Body
 
 ```json
 {
@@ -87,11 +114,11 @@ Request body:
 }
 ```
 
-Response:
+Response
 
 ```json
 {
-  "token": "JWT_TOKEN_HERE"
+  "token": "JWT_TOKEN"
 }
 ```
 
@@ -103,209 +130,125 @@ Authorization: Bearer <JWT_TOKEN>
 
 ---
 
-# 📚 Book APIs
+## API Endpoints
 
-### Get all books
+### Authentication
 
-```
-GET /books
-```
-
-Returns paginated list of books.
+POST /auth/login  
+Login and receive a JWT token.
 
 ---
 
-### Search books
+### Books
 
-```
-GET /books/search?title=harry
-```
+GET /books  
+Get all books.
 
-Search books by title.
+GET /books/{id}  
+Get book by ID.
 
----
+POST /books  
+Add a new book.
 
-### Get book by ID
+PUT /books/{id}  
+Update book information.
 
-```
-GET /books/{id}
-```
-
----
-
-### Add new book (ADMIN)
-
-```
-POST /books
-```
-
-Request body:
-
-```json
-{
-  "title": "Clean Code",
-  "author": "Robert C. Martin",
-  "isbn": "9780132350884",
-  "availableCopies": 5
-}
-```
+DELETE /books/{id}  
+Delete a book.
 
 ---
 
-### Update book (ADMIN)
+### Google Books Integration
 
-```
-PUT /books/{id}
-```
+POST /books/import-google?title={title}
 
----
+Imports books from Google Books API and stores them in the database.
 
-### Delete book (ADMIN)
-
-```
-DELETE /books/{id}
-```
-
----
-
-# 🌐 Google Books API Integration
-
-Books can be fetched from **Google Books API**.
-
-### Search Google Books
-
-```
-GET /books/google?title=harry potter
-```
-
-Example response:
-
-```json
-[
-  {
-    "title": "Harry Potter and the Sorcerer's Stone",
-    "author": "J.K. Rowling",
-    "isbn": "9781781100486"
-  }
-]
-```
-
----
-
-### Import books from Google
+Example:
 
 ```
 POST /books/import-google?title=harry potter
 ```
 
-This will fetch books from Google Books and **save them in the database**.
+---
+
+### Members
+
+GET /members  
+Get all members.
+
+POST /members  
+Add a new member.
 
 ---
 
-# 🗄 Database Schema
+### Borrow / Return
 
-Main tables used:
+POST /borrow  
+Borrow a book.
 
-```
-users
-book
-member
-borrow
-```
-
-Example **book table**
-
-| Column | Type |
-|---|---|
-| id | BIGINT |
-| title | VARCHAR |
-| author | VARCHAR |
-| isbn | VARCHAR |
-| availableCopies | INT |
+POST /return  
+Return a borrowed book.
 
 ---
 
-# 📦 Features
+## Database Schema
 
-✔ RESTful API design  
-✔ JWT Authentication  
-✔ Role-based authorization (ADMIN / USER)  
-✔ Book inventory management  
-✔ Search and pagination  
-✔ Google Books API integration  
-✔ Swagger API documentation  
-✔ MySQL database integration  
-✔ Cloud deployment
+Main tables:
+
+- users
+- book
+- member
+- borrow
+
+Users table stores login credentials and roles.
 
 ---
 
-# ▶ Running Locally
+## Running the Project Locally
 
-### Clone repository
+Clone the repository
 
 ```
 git clone https://github.com/Kavya-Sahu16/library-management-system.git
 ```
 
-### Navigate to project
+Navigate to the project directory
 
 ```
 cd library-management-system
 ```
 
-### Run application
+Run the application
 
 ```
 mvn spring-boot:run
 ```
 
-Server starts at:
+---
 
-```
-http://localhost:8080
-```
+## Future Improvements
 
-Swagger documentation:
+Possible enhancements:
 
-```
-http://localhost:8080/swagger-ui/index.html
-```
+- Pagination for book listing
+- Global exception handling
+- Logging with Spring Boot
+- Unit testing
+- Rate limiting for APIs
+- Frontend interface
 
 ---
 
-# 📷 API Documentation
+## Author
 
-Interactive API documentation is available through **Swagger UI**.
-
-It allows testing endpoints such as:
-
-- `/auth/login`
-- `/books`
-- `/books/search`
-- `/books/import-google`
-
----
-
-# 📈 Future Improvements
-
-- Member management
-- Borrow / return workflow
-- Fine calculation
-- Email notifications
-- Admin dashboard
-
----
-
-# 👩‍💻 Author
-
-**Kavya Sahu**
-
-Backend Developer | Java | Spring Boot
+Kavya Sahu
 
 GitHub:
-
 https://github.com/Kavya-Sahu16
 
 ---
 
-⭐ If you found this project useful, consider giving it a star!
+## License
+
+This project is for educational purposes.
