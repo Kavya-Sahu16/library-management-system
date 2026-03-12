@@ -53,9 +53,7 @@ https://library-api-42m4.onrender.com/swagger-ui/index.html
 
 <img width="1470" height="956" alt="Screenshot 2026-03-12 at 4 11 34 PM" src="https://github.com/user-attachments/assets/877b089c-03f2-49ca-9b21-f355c08e8717" />
 
-
-### Books Stored in Database-
-
+---
 
 ## Tech Stack
 
