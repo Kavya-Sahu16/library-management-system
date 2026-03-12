@@ -36,25 +36,25 @@ https://library-api-42m4.onrender.com/swagger-ui/index.html
 
 ## Screenshots
 
-### Swagger API Documentation
-![Swagger UI]
+### Swagger API Documentation-
 <img width="1470" height="956" alt="Screenshot 2026-03-12 at 4 02 32 PM" src="https://github.com/user-attachments/assets/27a6546f-35be-4b04-aad8-318f3e19b3e2" />
 
 <img width="1470" height="956" alt="Screenshot 2026-03-12 at 4 02 58 PM" src="https://github.com/user-attachments/assets/25c0f281-055a-4af7-9106-35d3b9ce6aeb" />
 
 
-### Login API (JWT Authentication)
+### Login API (JWT Authentication)-
 <img width="1470" height="956" alt="Screenshot 2026-03-12 at 4 09 48 PM" src="https://github.com/user-attachments/assets/0b1051c5-4d9b-4303-b58f-f02c97243fa7" />
 
 <img width="1470" height="956" alt="Screenshot 2026-03-12 at 4 10 00 PM" src="https://github.com/user-attachments/assets/ddbffd60-f0e6-4c6f-bfd7-1550518b9dd4" />
 
 
-### Import Books from Google Books API
+### Import Books from Google Books API-
 <img width="1470" height="956" alt="Screenshot 2026-03-12 at 4 11 17 PM" src="https://github.com/user-attachments/assets/805f35e8-b0ac-46e4-a055-cdd8834ca308" />
 
 <img width="1470" height="956" alt="Screenshot 2026-03-12 at 4 11 34 PM" src="https://github.com/user-attachments/assets/877b089c-03f2-49ca-9b21-f355c08e8717" />
 
-### Books Stored in Database
+
+### Books Stored in Database-
 
 
 ## Tech Stack
@@ -227,22 +227,16 @@ mvn spring-boot:run
 
 ---
 
-## Future Improvements
+# 📈 Future Improvements
 
-Possible enhancements:
-
-- Pagination for book listing
-- Global exception handling
-- Logging with Spring Boot
-- Unit testing
-- Rate limiting for APIs
+- Email notifications
 - Frontend interface
 
 ---
 
 ## Author
-
-Kavya Sahu
+**Kavya Sahu**
+Backend Developer | Java | Spring Boot
 
 GitHub:
 https://github.com/Kavya-Sahu16
